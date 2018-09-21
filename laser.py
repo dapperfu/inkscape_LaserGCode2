@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 """
+Modified by Jed Frey 2018.
 Modified by Jay Johnson 2015, J Tech Photonics, Inc., jtechphotonics.com
 modified by Adam Polak 2014, polakiumengineering.org
 
@@ -2612,7 +2613,7 @@ class laser_gcode(inkex.Effect):
 ###        Generate Gcode
 ###        Generates Gcode on given curve.
 ###
-###        Crve defenitnion [start point, type = {'arc','line','move','end'}, arc center, arc angle, end point, [zstart, zend]]
+###        Crve definition [start point, type = {'arc','line','move','end'}, arc center, arc angle, end point, [zstart, zend]]
 ###
 ################################################################################
     def generate_gcode(self, curve, layer, depth):
@@ -3162,8 +3163,8 @@ class laser_gcode(inkex.Effect):
             "id": "Laser Engraver",
             "penetration feed": self.options.laser_speed,
             "feed": self.options.laser_speed,
-            "gcode before path": ("G4 P0 \n" + self.options.laser_command + " S" + str(int(self.options.laser_power)) + "\nG4 P" + self.options.power_delay),
-            "gcode after path": ("G4 P0 \n" + self.options.laser_off_command + " S0" + "\n" + "G1 F" + self.options.travel_speed),
+            "gcode before path": (self.options.laser_command + " S" + str(int(self.options.laser_power))),
+            "gcode after path": (self.options.laser_off_command + "\n" + "G1 F{:.2f}".format(float(self.options.travel_speed))),
         }
 
         self.get_info()
