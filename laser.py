@@ -38,6 +38,7 @@ import sys
 import time
 import cmath
 import numpy
+import numpy as np
 import codecs
 import random
 import gettext
