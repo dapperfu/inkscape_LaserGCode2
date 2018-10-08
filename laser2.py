@@ -2871,7 +2871,6 @@ class laser_gcode(inkex.Effect):
     def __init__(self):
         inkex.Effect.__init__(self)
         self.OptionParser.add_option(
-            "-d",
             "--directory",
             action="store",
             type="string",
@@ -2879,7 +2878,6 @@ class laser_gcode(inkex.Effect):
             default="",
             help="Output directory")
         self.OptionParser.add_option(
-            "-f",
             "--filename",
             action="store",
             type="string",
@@ -2887,15 +2885,22 @@ class laser_gcode(inkex.Effect):
             default="output.gcode",
             help="File name")
         self.OptionParser.add_option(
-            "",
+            "--tab",
+            action="store",
+            type="string",
+            dest="tab",
+            default="",
+            help="File name")
+        self.OptionParser.add_option(
             "--add-numeric-suffix-to-filename",
+            "--add_numeric_suffix_to_filename",
             action="store",
             type="inkbool",
             dest="add_numeric_suffix_to_filename",
             default=False,
             help="Add numeric suffix to file name")
         self.OptionParser.add_option(
-            "",
+            "--laser_command",
             "--laser-command",
             action="store",
             type="string",
@@ -2903,7 +2908,7 @@ class laser_gcode(inkex.Effect):
             default="M03",
             help="Laser gcode command")
         self.OptionParser.add_option(
-            "",
+            "--laser_off_command",
             "--laser-off-command",
             action="store",
             type="string",
@@ -2911,15 +2916,13 @@ class laser_gcode(inkex.Effect):
             default="M05",
             help="Laser gcode end command")
         self.OptionParser.add_option(
-            "",
-            "--laser-speed",
+            "--laser_speed",
             action="store",
             type="int",
             dest="laser_speed",
             default="100",
             help="Laser speed (mm/min)")
         self.OptionParser.add_option(
-            "",
             "--extension",
             action="store",
             type="string",
@@ -2927,21 +2930,20 @@ class laser_gcode(inkex.Effect):
             default=".ngc",
             help="Extension for the output file.")
         self.OptionParser.add_option(
-            "",
             "--travel-speed",
+            "--travel_speed",
             action="store",
             type="string",
             dest="travel_speed",
             default="3000",
             help="Travel speed (mm/min)")
         self.OptionParser.add_option(
-            "",
+            "--laser_power",
             "--laser-power",
             action="store",
             type="int",
             dest="laser_power",
-            default="255
-            ",
+            default="255",
             help="S# [255 for full power]")
         self.OptionParser.add_option(
             "",
@@ -2952,7 +2954,7 @@ class laser_gcode(inkex.Effect):
             default="1",
             help="Quantity of passes")
         self.OptionParser.add_option(
-            "",
+            "--pass_depth",
             "--pass-depth",
             action="store",
             type="string",
@@ -2960,7 +2962,7 @@ class laser_gcode(inkex.Effect):
             default="1",
             help="Depth of laser cut")
         self.OptionParser.add_option(
-            "",
+            "--power_delay",
             "--power-delay",
             action="store",
             type="string",
@@ -2968,7 +2970,7 @@ class laser_gcode(inkex.Effect):
             default="0",
             help="Laser power-on delay (s)")
         self.OptionParser.add_option(
-            "",
+            "--suppress_all_messages",
             "--suppress-all-messages",
             action="store",
             type="inkbool",
@@ -2976,7 +2978,7 @@ class laser_gcode(inkex.Effect):
             default=True,
             help="Hide messages during g-code generation")
         self.OptionParser.add_option(
-            "",
+            "--create_log"
             "--create-log",
             action="store",
             type="inkbool",
@@ -2984,7 +2986,7 @@ class laser_gcode(inkex.Effect):
             default=False,
             help="Create log files")
         self.OptionParser.add_option(
-            "",
+            "--log_filename",
             "--log-filename",
             action="store",
             type="string",
@@ -2992,15 +2994,14 @@ class laser_gcode(inkex.Effect):
             default='',
             help="Create log files")
         self.OptionParser.add_option(
-            "",
             "--engraving-draw-calculation-paths",
+            "--engraving_draw_calculation_paths",
             action="store",
             type="inkbool",
             dest="engraving_draw_calculation_paths",
             default=False,
             help="Draw additional graphics to debug engraving path")
         self.OptionParser.add_option(
-            "",
             "--unit",
             action="store",
             type="string",
@@ -3008,7 +3009,7 @@ class laser_gcode(inkex.Effect):
             default="G21 (All units in mm)",
             help="Units either mm or inches")
         self.OptionParser.add_option(
-            "",
+            "--active_tab",
             "--active-tab",
             action="store",
             type="string",
@@ -3016,7 +3017,7 @@ class laser_gcode(inkex.Effect):
             default="",
             help="Defines which tab is active")
         self.OptionParser.add_option(
-            "",
+            "--biarc_max_split_depth",
             "--biarc-max-split-depth",
             action="store",
             type="int",
