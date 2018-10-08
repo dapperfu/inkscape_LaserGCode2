@@ -3240,16 +3240,16 @@ class laser_gcode(inkex.Effect):
                     max_n = max(max_n, int(r.group(1)))
             filename = name + "_" + \
                 ("0" * (4 - len(str(max_n + 1))) + str(max_n + 1)) + ext
-            self.options.file = filename
+            self.options.file = filename + self.options.extension
 
-        print_("Testing writing rights on '%s'" %
-               (self.options.directory + self.options.file))
+        out_file = os.path.join(self.options.directory,self.options.file)
+        print_("Testing writing rights on '%s'" % (out_file))
         try:
-            f = open(self.options.directory + self.options.file, "w")
+            f = open(out_file, "w")
             f.close()
         except BaseException:
-            self.error(_("Can not write to specified file!\n%s" %
-                         (self.options.directory + self.options.file)), "error")
+            self.error(_("Can not write to specified file!\n\t'%s'" %
+                         (out_file)), "error")
             return False
         return True
 
