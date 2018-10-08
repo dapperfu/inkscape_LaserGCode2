@@ -1,66 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <inkscape-extension xmlns="http://www.inkscape.org/namespace/inkscape/extension">
-   <_name>Laser GCode Tool2</_name>
-   <id>laser.frey-jed.com.github.com</id>
-   <dependency type="executable" location="extensions">laser2.py</dependency>
-   <dependency type="executable" location="extensions">inkex.py</dependency>
-
-
+  <_name>Laser GCode Tool2</_name>
+  <id>laser.frey-jed.com.github.com</id>
+  <dependency type="executable" location="extensions">laser2.py</dependency>
+  <dependency type="executable" location="extensions">inkex.py</dependency>
   <param name="tab" type="notebook">
     <page name="splash" _gui-text="GCode Configuration">
-
-   <param name="laser-command" type="enum" _gui-text="Laser On Cmd:">
-      <item value="M3">M3 - Static Laser Power</item>
-      <item value="M4">M4 - Dynamic Laser Power</item>
-   </param>
-   <param name="laser_off_command" type="string" _gui-text="Laser OFF Command:">M5</param>
-   <param name="travel_speed" type="int" min="0" max="10000" _gui-text="Travel Speed (mm/min):">500</param>
-   <param name="laser_speed" type="int" min="0" max="4000" _gui-text="Laser Speed (mm/min):">250</param>
-   <param name="laser_power" type="int" min="0" max="20000" _gui-text="Laser Power S# (0-255):">255</param>
-   <param name="power_delay" type="float" min="0" max="1000" _gui-text="Power-On Delay (s):">0.0000</param>
-   <param name="directory" type="string" _gui-text="Directory:">/tmp</param>
-   <param name="filename" type="string" _gui-text="Filename:">output</param>
-   <param name="add_numeric_suffix_to_filename" type="boolean" _gui-text="Add numeric suffix {0001, 0002, ...} to filename">true</param>
-   <param name="extension" type="enum" _gui-text="File Extension:">
-      <item value=".ngc">.ngc</item>
-      <item value=".ngc">.nc</item>
-      <item value=".ncc">.ncc</item>
-      <item value=".tap">.tap</item>
-      <item value=".txt">.txt</item>
-      <item value=".gcode">.gcode</item>
-   </param>
-   </page>
-
-  <page name="header" _gui-text="Header">
+      <param name="laser-command" type="enum" _gui-text="Laser On Cmd:">
+        <item value="M3">M3 - Static Laser Power</item>
+        <item value="M4">M4 - Dynamic Laser Power</item>
+      </param>
+      <param name="laser_off_command" type="string" _gui-text="Laser OFF Command:">M5</param>
+      <param name="travel_speed" type="int" min="0" max="10000" _gui-text="Travel Speed (mm/min):">500</param>
+      <param name="laser_speed" type="int" min="0" max="4000" _gui-text="Laser Speed (mm/min):">250</param>
+      <param name="laser_power" type="int" min="0" max="20000" _gui-text="Laser Power S# (0-255):">255</param>
+      <param name="power_delay" type="float" min="0" max="1000" _gui-text="Power-On Delay (s):">0.0000</param>
+      <param name="directory" type="string" _gui-text="Directory:">/tmp</param>
+      <param name="filename" type="string" _gui-text="Filename:">output</param>
+      <param name="add_numeric_suffix_to_filename" type="boolean" _gui-text="Add numeric suffix {0001, 0002, ...} to filename">true</param>
+      <param name="extension" type="enum" _gui-text="File Extension:">
+        <item value=".ngc">.ngc</item>
+        <item value=".ngc">.nc</item>
+        <item value=".ncc">.ncc</item>
+        <item value=".tap">.tap</item>
+        <item value=".txt">.txt</item>
+        <item value=".gcode">.gcode</item>
+      </param>
+    </page>
+    <page name="header" _gui-text="Header">
 
    </page>
-  <page name="footer" _gui-text="Footer">
+    <page name="footer" _gui-text="Footer">
 
    </page>
-
     <page name="license" _gui-text="License">
 
    </page>
-
-</param>
-
-
-
-
-
-
-
-
-
-
-
-   <effect needs-live-preview="false" needs-document="true">
-      <object-type>all</object-type>
-      <effects-menu>
-         <submenu _name="Generate Laser Gcode" />
-      </effects-menu>
-   </effect>
-   <script>
-      <command reldir="extensions" interpreter="python">laser2.py</command>
-   </script>
+  </param>
+  <effect needs-live-preview="false" needs-document="true">
+    <object-type>all</object-type>
+    <effects-menu>
+      <submenu _name="Generate Laser Gcode"/>
+    </effects-menu>
+  </effect>
+  <script>
+    <command reldir="extensions" interpreter="python">laser2.py</command>
+  </script>
 </inkscape-extension>

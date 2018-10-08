@@ -4006,8 +4006,12 @@ if __name__ == "__main__":
         fid.write("\n")
         fid.write(sys.executable)
         fid.write(" ")
-        fid.write(" ".join(sys.argv[:-1]))
+        fid.write(os.path.abspath(sys.argv[0]))
         fid.write(" ")
+        for arg in sys.argv[1:-1]:
+            key, value = arg.split("=")
+            fid.write("{}='{}'".format(key, value))
+            fid.write(" ")
         fid.write(out_file)
 
         fid.write("\n"*2)
