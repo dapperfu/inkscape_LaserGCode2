@@ -2983,7 +2983,7 @@ class laser_gcode(inkex.Effect):
             action="store",
             type="inkbool",
             dest="log_create_log",
-            default=False,
+            default=True,
             help="Create log files")
         self.OptionParser.add_option(
             "--log_filename",
@@ -2991,7 +2991,7 @@ class laser_gcode(inkex.Effect):
             action="store",
             type="string",
             dest="log_filename",
-            default='',
+            default='laser2.log',
             help="Create log files")
         self.OptionParser.add_option(
             "--engraving-draw-calculation-paths",
@@ -3212,10 +3212,6 @@ class laser_gcode(inkex.Effect):
             else:
                 self.footer = defaults['footer']
 
-            if self.options.unit == "G21 (All units in mm)":
-                self.header += "G21\n"
-            elif self.options.unit == "G20 (All units in inches)":
-                self.header += "G20\n"
         else:
             self.error(
                 _("Directory does not exist! Please specify existing directory at options tab!"),
@@ -3954,8 +3950,8 @@ class laser_gcode(inkex.Effect):
             "id": "Laser Engraver",
             "penetration feed": self.options.laser_speed,
             "feed": self.options.laser_speed,
-            "gcode before path": (self.options.laser_command + " S" + str(int(self.options.laser_power))),
-            "gcode after path": (self.options.laser_off_command + "\n" + "G1 F{:.2f}".format(float(self.options.travel_speed))),
+            "gcode before path": (self.options.laser_command + "S" + str(int(self.options.laser_power))),
+            "gcode after path": (self.options.laser_off_command + "\n" + "G1F{:.2f}".format(float(self.options.travel_speed))),
         }
 
         self.get_info()
@@ -3967,7 +3963,7 @@ if __name__ == "__main__":
     import datetime
     import shutil
 
-    with open("/tmp/hello.txt", "w") as fid:
+    with open("laser2.debug", "w") as fid:
         fid.write("#" * 20)
         fid.write("\n# ")
         fid.write(str(datetime.datetime.now()))
@@ -3996,7 +3992,7 @@ if __name__ == "__main__":
     else:
         out_file = in_file
 
-    with open("/tmp/hello.sh", "w") as fid:
+    with open("laser2.sh", "w") as fid:
         fid.write("#!/usr/bin/env bash")
         fid.write("\n# ")
         fid.write(str(datetime.datetime.now()))
@@ -4010,11 +4006,31 @@ if __name__ == "__main__":
         fid.write(" ")
         for arg in sys.argv[1:-1]:
             key, value = arg.split("=")
-            fid.write("{}='{}'".format(key, value))
+            fid.write("{}={}".format(key, value))
             fid.write(" ")
         fid.write(out_file)
 
         fid.write("\n"*2)
+
+    with open("laser2_run.py", "w") as fid:
+        fid.write("#!"+sys.executable)
+        fid.write("\n# ")
+        fid.write(str(datetime.datetime.now()))
+        fid.write("\n"*2)
+
+        fid.write("import sys\n");
+        fid.write("sys.path.append('/usr/share/inkscape/extensions')\n");
+        fid.write("sys.path.append(os.path.expanduser('~/.config/inkscape/extensions'))\n");
+
+        fid.write("args = [\n");
+        for arg in sys.argv[1:]:
+            fid.write("    \"{}\",\n".format(arg))
+
+
+        fid.write("]\n")
+        fid.write("import laser2\n")
+        fid.write("l = laser2.laser_gcode()\n")
+        fid.write("l.affect(args)\n")
 
     e = laser_gcode()
     e.affect()
