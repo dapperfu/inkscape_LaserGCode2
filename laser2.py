@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-Modified by Jed Frey 2018.https://www.linkedin.com/jed-frey
+Modified by Jed Frey 2018.
 Modified by Jay Johnson 2015, J Tech Photonics, Inc., jtechphotonics.com
 modified by Adam Polak 2014, polakiumengineering.org
 
