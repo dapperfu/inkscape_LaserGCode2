@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 """
-Modified by Jed Frey 2018.
 Modified by Jay Johnson 2015, J Tech Photonics, Inc., jtechphotonics.com
 modified by Adam Polak 2014, polakiumengineering.org
 
@@ -38,7 +37,6 @@ import sys
 import time
 import cmath
 import numpy
-import numpy as np
 import codecs
 import random
 import gettext
@@ -90,7 +88,7 @@ defaults = {
 G90
 """,
 'footer': """G1 X0 Y0
-M18
+
 """
 }
 
@@ -2423,12 +2421,12 @@ class laser_gcode(inkex.Effect):
         self.OptionParser.add_option("",   "--add-numeric-suffix-to-filename",  action="store", type="inkbool",         dest="add_numeric_suffix_to_filename",      default=False,                          help="Add numeric suffix to file name")
         self.OptionParser.add_option("",   "--laser-command",                   action="store", type="string",          dest="laser_command",                       default="M03",                      help="Laser gcode command")
         self.OptionParser.add_option("",   "--laser-off-command",               action="store", type="string",          dest="laser_off_command",                   default="M05",                         help="Laser gcode end command")
-        self.OptionParser.add_option("",   "--laser-speed",                     action="store", type="int",             dest="laser_speed",                         default="100",                          help="Laser speed (mm/min)")
+        self.OptionParser.add_option("",   "--laser-speed",                     action="store", type="int",             dest="laser_speed",                         default="750",                          help="Laser speed (mm/min)")
         self.OptionParser.add_option("",   "--travel-speed",                    action="store", type="string",          dest="travel_speed",                        default="3000",                         help="Travel speed (mm/min)")
-        self.OptionParser.add_option("",   "--laser-power",                     action="store", type="int",             dest="laser_power",                         default="256",                          help="S# is 256 or 10000 for full power")
+        self.OptionParser.add_option("",   "--laser-power",                     action="store", type="int",             dest="laser_power",                         default="255",                          help="S# is 256 or 10000 for full power")
         self.OptionParser.add_option("",   "--passes",                          action="store", type="int",             dest="passes",                              default="1",                            help="Quantity of passes")
         self.OptionParser.add_option("",   "--pass-depth",                      action="store", type="string",          dest="pass_depth",                          default="1",                            help="Depth of laser cut")
-        self.OptionParser.add_option("",   "--power-delay",                     action="store", type="string",          dest="power_delay",                         default="100",                          help="Laser power-on delay (ms)")
+        self.OptionParser.add_option("",   "--power-delay",                     action="store", type="string",          dest="power_delay",                         default="0",                          help="Laser power-on delay (ms)")
         self.OptionParser.add_option("",   "--suppress-all-messages",           action="store", type="inkbool",         dest="suppress_all_messages",               default=True,                           help="Hide messages during g-code generation")
         self.OptionParser.add_option("",   "--create-log",                      action="store", type="inkbool",         dest="log_create_log",                      default=False,                          help="Create log files")
         self.OptionParser.add_option("",   "--log-filename",                    action="store", type="string",          dest="log_filename",                        default='',                             help="Create log files")
@@ -2614,7 +2612,7 @@ class laser_gcode(inkex.Effect):
 ###        Generate Gcode
 ###        Generates Gcode on given curve.
 ###
-###        Crve definition [start point, type = {'arc','line','move','end'}, arc center, arc angle, end point, [zstart, zend]]
+###        Crve defenitnion [start point, type = {'arc','line','move','end'}, arc center, arc angle, end point, [zstart, zend]]
 ###
 ################################################################################
     def generate_gcode(self, curve, layer, depth):
@@ -3164,41 +3162,12 @@ class laser_gcode(inkex.Effect):
             "id": "Laser Engraver",
             "penetration feed": self.options.laser_speed,
             "feed": self.options.laser_speed,
-            "gcode before path": (self.options.laser_command + " S" + str(int(self.options.laser_power))),
-            "gcode after path": (self.options.laser_off_command + "\n" + "G1 F{:.2f}".format(float(self.options.travel_speed))),
+            "gcode before path": ("G4 P0 \n" + self.options.laser_command + " S" + str(int(self.options.laser_power)) + "\nG4 P" + self.options.power_delay),
+            "gcode after path": ("G4 P0 \n" + self.options.laser_off_command + " S0" + "\n" + "G1 F" + self.options.travel_speed),
         }
 
         self.get_info()
         self.laser()
 
-if __name__ == "__main__":
-    import sys
-    import datetime
-    import shutil
-
-    fid = open("/tmp/hello.txt", "w")
-    fid.write("#"*20)
-    fid.write("\n# ")
-    fid.write(str(datetime.datetime.now()))
-    fid.write("\n")
-    fid.write("#"*20)
-
-    fid.write("\nExecutable: \n\t")
-    fid.write(sys.executable)
-
-    fid.write("\nPaths:\n")
-    for path in sys.path:
-        fid.write("\t")
-        fid.write(path)
-        fid.write("\n")
-
-    fid.write("\nArgs:\n")
-    for arg in sys.argv:
-        fid.write("\t")
-        fid.write(arg)
-        fid.write("\n")
-
-    shutil.copy2(sys.argv[-1], sys.argv[-1]+".svg")
-
-    e = laser_gcode()
-    e.affect()
+e = laser_gcode()
+e.affect()
