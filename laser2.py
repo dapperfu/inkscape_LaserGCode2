@@ -3963,7 +3963,7 @@ if __name__ == "__main__":
     import datetime
     import shutil
 
-    with open("laser2.debug", "w") as fid:
+    with open("/tmp/laser2.debug", "w") as fid:
         fid.write("#" * 20)
         fid.write("\n# ")
         fid.write(str(datetime.datetime.now()))
@@ -3992,7 +3992,7 @@ if __name__ == "__main__":
     else:
         out_file = in_file
 
-    with open("laser2.sh", "w") as fid:
+    with open("/tmp/laser2.sh", "w") as fid:
         fid.write("#!/usr/bin/env bash")
         fid.write("\n# ")
         fid.write(str(datetime.datetime.now()))
@@ -4012,7 +4012,7 @@ if __name__ == "__main__":
 
         fid.write("\n"*2)
 
-    with open("laser2_run.py", "w") as fid:
+    with open("/tmp/laser2_run.py", "w") as fid:
         fid.write("#!"+sys.executable)
         fid.write("\n# ")
         fid.write(str(datetime.datetime.now()))

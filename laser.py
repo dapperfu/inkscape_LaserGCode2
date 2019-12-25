@@ -1347,7 +1347,7 @@ def cubic_solver(a,b,c,d):
 ###        print_ prints any arguments into specified log file
 ################################################################################
 
-def print_(*arg):
+ (*arg):
     f = open(options.log_filename,"a")
     for s in arg :
         s = str(unicode(s).encode('unicode_escape'))+" "
@@ -2213,11 +2213,11 @@ class Polygon:
                 first_run = False
                 if loops1 > len_edges  : raise ValueError, "Hull error"
                 loops1 += 1
-                next = get_closes_edge_by_angle(edges[last[1]],last)
+                next_point = get_closes_edge_by_angle(edges[last[1]],last)
                 #draw_pointer(next[0]+next[1],"Green","line", comment=i, width= 1)
                 #print_(next[0],"-",next[1])
 
-                last = next
+                last = next_point
                 poly += [ list(last[0]) ]
             self.polygon += [ poly ]
             # Remove all edges that are intersects new poly (any vertex inside new poly)
