@@ -2255,7 +2255,7 @@ class Arangement_Genetic:
         # retun distance, each component is normalized
         s = 0
         for j in range(self.genes_count) :
-            s += ((sp1[j][0]-sp2[j][0])/self.genes_count)**2 + (( sp1[j][1]-sp2[j][1]))**2 + ((sp1[j][2]-sp2[j][2]))**2
+            s += ((sp1[j][0]-sp2[j][0])/self.genes_count)**2 + ( sp1[j][1]-sp2[j][1])**2 + (sp1[j][2]-sp2[j][2])**2
         return s
 
 
@@ -2808,15 +2808,15 @@ class laser_gcode(inkex.Effect):
                         active_layer_already_has_tool
                         active_layer_already_has_orientation_points
                     """
-        if type_.lower() in re.split("[\s\n,\.]+", errors.lower()) :
+        if type_.lower() in re.split("[\\s\n,\\.]+", errors.lower()) :
             print_(s)
             inkex.errormsg(s+"\n")
             sys.exit()
-        elif type_.lower() in re.split("[\s\n,\.]+", warnings.lower()) :
+        elif type_.lower() in re.split("[\\s\n,\\.]+", warnings.lower()) :
             print_(s)
             if not self.options.suppress_all_messages :
                 inkex.errormsg(s+"\n")
-        elif type_.lower() in re.split("[\s\n,\.]+", notes.lower()) :
+        elif type_.lower() in re.split("[\\s\n,\\.]+", notes.lower()) :
             print_(s)
         else :
             print_(s)
@@ -2923,7 +2923,7 @@ class laser_gcode(inkex.Effect):
                 for path in self.selected_paths[layer]:
                     if self.options.dxfpoints_action == 'replace':
                         path.set("dxfpoint","1")
-                        r = re.match("^\s*.\s*(\S+)",path.get("d"))
+                        r = re.match(r"^\s*.\s*(\S+)",path.get("d"))
                         if r!=None:
                             print_(("got path=",r.group(1)))
                             path.set("d","m %s 2.9375,-6.343750000001 0.8125,1.90625 6.843748640396,-6.84374864039 0,0 0.6875,0.6875 -6.84375,6.84375 1.90625,0.812500000001 z" % r.group(1))
@@ -3169,5 +3169,87 @@ class laser_gcode(inkex.Effect):
         self.get_info()
         self.laser()
 
-e = laser_gcode()
-e.affect()
+if __name__ == "__main__":
+    import sys
+    import datetime
+    import shutil
+    
+    e = laser_gcode()
+    e.affect()
+    if sys.argv[-1] == '/tmp/last_gcode_file.svg':
+		sys.exit(0)
+		
+    shutil.copy(sys.argv[-1], '/tmp/last_gcode_file.svg')
+    sys.argv[-1] = '/tmp/last_gcode_file.svg'
+    
+    with open("/tmp/laser.debug", "w") as fid:
+        fid.write("#" * 20)
+        fid.write("\n# ")
+        fid.write(str(datetime.datetime.now()))
+        fid.write("\n")
+        fid.write("#" * 20)
+
+        fid.write("\nExecutable: \n\t")
+        fid.write(sys.executable)
+
+        fid.write("\nPaths:\n")
+        for path in sys.path:
+            fid.write("\t")
+            fid.write(path)
+            fid.write("\n")
+
+        fid.write("\nArgs:\n")
+        for arg in sys.argv:
+            fid.write("\t")
+            fid.write(arg)
+            fid.write("\n")
+
+    in_file = sys.argv[-1]
+    if not in_file.endswith(".svg"):
+        out_file = sys.argv[-1] + ".svg"
+        shutil.copy2(sys.argv[-1], out_file)
+    else:
+        out_file = in_file
+
+    with open("/tmp/laser.sh", "w") as fid:
+        fid.write("#!/usr/bin/env bash")
+        fid.write("\n# ")
+        fid.write(str(datetime.datetime.now()))
+        fid.write("\n"*2)
+        fid.write("export PYTHONPATH=");
+        fid.write(os.pathsep.join(sys.path))
+        fid.write("\n")
+        fid.write(sys.executable)
+        fid.write(" ")
+        fid.write(os.path.abspath(sys.argv[0]))
+        fid.write(" ")
+        for arg in sys.argv[1:-1]:
+            key, value = arg.split("=")
+            fid.write("{}='{}'".format(key, value))
+            fid.write(" ")
+        fid.write(out_file)
+
+        fid.write("\n"*2)
+
+    with open("/tmp/laser_run.py", "w") as fid:
+        fid.write("#!"+sys.executable)
+        fid.write("\n# ")
+        fid.write(str(datetime.datetime.now()))
+        fid.write("\n"*2)
+
+        fid.write("import sys\n");
+        fid.write("sys.path.append('/usr/share/inkscape/extensions')\n");
+        fid.write("sys.path.append(os.path.expanduser('~/.config/inkscape/extensions'))\n");
+
+        fid.write("args = [\n");
+        for arg in sys.argv[1:]:
+            fid.write("    \"{}\",\n".format(arg))
+
+
+        fid.write("]\n")
+        fid.write("import laser\n")
+        fid.write("l = laser.laser_gcode()\n")
+        fid.write("l.affect(args)\n")
+
+    e = laser_gcode()
+    e.affect()

@@ -53,12 +53,12 @@ def export_MTEXT():
                 text += vals[groups['3']][i]
         if vals[groups['1']]:
             text += vals[groups['1']][0]
-        found = text.find('\P')         # new line
+        found = text.find(r'\P')         # new line
         while found > -1:
             tspan = inkex.etree.SubElement(node , 'tspan', {inkex.addNS('role','sodipodi'): 'line'})
             tspan.text = text[:found]
             text = text[(found+2):]
-            found = text.find('\P')
+            found = text.find(r'\P')
         tspan = inkex.etree.SubElement(node , 'tspan', {inkex.addNS('role','sodipodi'): 'line'})
         tspan.text = text
 
@@ -401,7 +401,7 @@ while line[0] and line[1] != 'DICTIONARY':
     if entity and groups.has_key(line[0]):
         seqs.append(line[0])                        # list of group codes
         if line[0] == '1' or line[0] == '2' or line[0] == '3' or line[0] == '6' or line[0] == '8':  # text value
-            val = line[1].replace('\~', ' ')
+            val = line[1].replace(r'\~', ' ')
             val = inkex.re.sub( '\\\\A.*;', '', val)
             val = inkex.re.sub( '\\\\H.*;', '', val)
             val = inkex.re.sub( '\\^I', '', val)
@@ -411,7 +411,7 @@ while line[0] and line[1] != 'DICTIONARY':
             val = inkex.re.sub( '\\\\W.*;', '', val)
             val = unicode(val, options.input_encode)
             val = val.encode('unicode_escape')
-            val = inkex.re.sub( '\\\\\\\\U\+([0-9A-Fa-f]{4})', '\\u\\1', val)
+            val = inkex.re.sub( '\\\\\\\\U\\+([0-9A-Fa-f]{4})', '\\u\\1', val)
             val = val.decode('unicode_escape')
         elif line[0] == '62' or line[0] == '70' or line[0] == '92' or line[0] == '93':
             val = int(line[1])
