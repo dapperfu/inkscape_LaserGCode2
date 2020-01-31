@@ -1347,7 +1347,7 @@ def cubic_solver(a,b,c,d):
 ###        print_ prints any arguments into specified log file
 ################################################################################
 
- (*arg):
+def print_(*arg):
     f = open(options.log_filename,"a")
     for s in arg :
         s = str(unicode(s).encode('unicode_escape'))+" "
