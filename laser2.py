@@ -38,13 +38,13 @@ import sys
 import time
 
 import bezmisc
-import cubicsuperpath
+#import cubicsuperpath
 import inkex
 import numpy
 import numpy as np
-import simplepath
-import simplestyle
-import simpletransform
+#import simplepath
+#import simplestyle
+#import simpletransform
 
 _ = gettext.gettext
 
@@ -4597,5 +4597,4 @@ if __name__ == "__main__":
         fid.write("l = laser2.laser_gcode()\n")
         fid.write("l.affect(args)\n")
 
-    e = laser_gcode()
-    e.affect()
+    laser_gcode().run()
