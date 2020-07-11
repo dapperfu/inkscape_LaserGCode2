@@ -26,6 +26,6 @@
     <object-type>path</object-type>
   </effect>
   <script>
-    <command reldir="extensions" interpreter="python">laser.py</command>
+    <command location="inx" interpreter="python">laser.py</command>
   </script>
 </inkscape-extension>

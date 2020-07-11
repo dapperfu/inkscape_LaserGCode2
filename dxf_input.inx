@@ -32,6 +32,6 @@
     <_filetypetooltip>Import AutoCAD's Document Exchange Format</_filetypetooltip>
   </input>
   <script>
-    <command reldir="extensions" interpreter="python">dxf_input.py</command>
+    <command location="inx" interpreter="python">dxf_input.py</command>
   </script>
 </inkscape-extension>

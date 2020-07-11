@@ -1,6 +1,6 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
-Modified by Jed Frey 2018.
+Modified by dapperfu, 2020.
 Modified by Jay Johnson 2015, J Tech Photonics, Inc., jtechphotonics.com
 modified by Adam Polak 2014, polakiumengineering.org
 
@@ -113,7 +113,7 @@ intersection_tolerance = 0.00001
 
 styles = {
     "loft_style": {
-        "main curve": simplestyle.formatStyle(
+        "main curve": inkex.Style(
             {
                 "stroke": "#88f",
                 "fill": "none",
@@ -123,7 +123,7 @@ styles = {
         ),
     },
     "biarc_style": {
-        "biarc0": simplestyle.formatStyle(
+        "biarc0": inkex.Style(
             {
                 "stroke": "#88f",
                 "fill": "none",
@@ -131,7 +131,7 @@ styles = {
                 "stroke-width": "1",
             }
         ),
-        "biarc1": simplestyle.formatStyle(
+        "biarc1": inkex.Style(
             {
                 "stroke": "#8f8",
                 "fill": "none",
@@ -139,7 +139,7 @@ styles = {
                 "stroke-width": "1",
             }
         ),
-        "line": simplestyle.formatStyle(
+        "line": inkex.Style(
             {
                 "stroke": "#f88",
                 "fill": "none",
@@ -147,7 +147,7 @@ styles = {
                 "stroke-width": "1",
             }
         ),
-        "area": simplestyle.formatStyle(
+        "area": inkex.Style(
             {
                 "stroke": "#777",
                 "fill": "none",
@@ -157,7 +157,7 @@ styles = {
         ),
     },
     "biarc_style_dark": {
-        "biarc0": simplestyle.formatStyle(
+        "biarc0": inkex.Style(
             {
                 "stroke": "#33a",
                 "fill": "none",
@@ -165,7 +165,7 @@ styles = {
                 "stroke-width": "1",
             }
         ),
-        "biarc1": simplestyle.formatStyle(
+        "biarc1": inkex.Style(
             {
                 "stroke": "#3a3",
                 "fill": "none",
@@ -173,7 +173,7 @@ styles = {
                 "stroke-width": "1",
             }
         ),
-        "line": simplestyle.formatStyle(
+        "line": inkex.Style(
             {
                 "stroke": "#a33",
                 "fill": "none",
@@ -181,7 +181,7 @@ styles = {
                 "stroke-width": "1",
             }
         ),
-        "area": simplestyle.formatStyle(
+        "area": inkex.Style(
             {
                 "stroke": "#222",
                 "fill": "none",
@@ -191,7 +191,7 @@ styles = {
         ),
     },
     "biarc_style_dark_area": {
-        "biarc0": simplestyle.formatStyle(
+        "biarc0": inkex.Style(
             {
                 "stroke": "#33a",
                 "fill": "none",
@@ -199,7 +199,7 @@ styles = {
                 "stroke-width": "0.1",
             }
         ),
-        "biarc1": simplestyle.formatStyle(
+        "biarc1": inkex.Style(
             {
                 "stroke": "#3a3",
                 "fill": "none",
@@ -207,7 +207,7 @@ styles = {
                 "stroke-width": "0.1",
             }
         ),
-        "line": simplestyle.formatStyle(
+        "line": inkex.Style(
             {
                 "stroke": "#a33",
                 "fill": "none",
@@ -215,7 +215,7 @@ styles = {
                 "stroke-width": "0.1",
             }
         ),
-        "area": simplestyle.formatStyle(
+        "area": inkex.Style(
             {
                 "stroke": "#222",
                 "fill": "none",
@@ -225,7 +225,7 @@ styles = {
         ),
     },
     "biarc_style_i": {
-        "biarc0": simplestyle.formatStyle(
+        "biarc0": inkex.Style(
             {
                 "stroke": "#880",
                 "fill": "none",
@@ -233,7 +233,7 @@ styles = {
                 "stroke-width": "1",
             }
         ),
-        "biarc1": simplestyle.formatStyle(
+        "biarc1": inkex.Style(
             {
                 "stroke": "#808",
                 "fill": "none",
@@ -241,7 +241,7 @@ styles = {
                 "stroke-width": "1",
             }
         ),
-        "line": simplestyle.formatStyle(
+        "line": inkex.Style(
             {
                 "stroke": "#088",
                 "fill": "none",
@@ -249,7 +249,7 @@ styles = {
                 "stroke-width": "1",
             }
         ),
-        "area": simplestyle.formatStyle(
+        "area": inkex.Style(
             {
                 "stroke": "#999",
                 "fill": "none",
@@ -259,7 +259,7 @@ styles = {
         ),
     },
     "biarc_style_dark_i": {
-        "biarc0": simplestyle.formatStyle(
+        "biarc0": inkex.Style(
             {
                 "stroke": "#dd5",
                 "fill": "none",
@@ -267,7 +267,7 @@ styles = {
                 "stroke-width": "1",
             }
         ),
-        "biarc1": simplestyle.formatStyle(
+        "biarc1": inkex.Style(
             {
                 "stroke": "#d5d",
                 "fill": "none",
@@ -275,7 +275,7 @@ styles = {
                 "stroke-width": "1",
             }
         ),
-        "line": simplestyle.formatStyle(
+        "line": inkex.Style(
             {
                 "stroke": "#5dd",
                 "fill": "none",
@@ -283,7 +283,7 @@ styles = {
                 "stroke-width": "1",
             }
         ),
-        "area": simplestyle.formatStyle(
+        "area": inkex.Style(
             {
                 "stroke": "#aaa",
                 "fill": "none",
@@ -293,7 +293,7 @@ styles = {
         ),
     },
     "biarc_style_lathe_feed": {
-        "biarc0": simplestyle.formatStyle(
+        "biarc0": inkex.Style(
             {
                 "stroke": "#07f",
                 "fill": "none",
@@ -301,7 +301,7 @@ styles = {
                 "stroke-width": ".4",
             }
         ),
-        "biarc1": simplestyle.formatStyle(
+        "biarc1": inkex.Style(
             {
                 "stroke": "#0f7",
                 "fill": "none",
@@ -309,7 +309,7 @@ styles = {
                 "stroke-width": ".4",
             }
         ),
-        "line": simplestyle.formatStyle(
+        "line": inkex.Style(
             {
                 "stroke": "#f44",
                 "fill": "none",
@@ -317,7 +317,7 @@ styles = {
                 "stroke-width": ".4",
             }
         ),
-        "area": simplestyle.formatStyle(
+        "area": inkex.Style(
             {
                 "stroke": "#aaa",
                 "fill": "none",
@@ -327,7 +327,7 @@ styles = {
         ),
     },
     "biarc_style_lathe_passing feed": {
-        "biarc0": simplestyle.formatStyle(
+        "biarc0": inkex.Style(
             {
                 "stroke": "#07f",
                 "fill": "none",
@@ -335,7 +335,7 @@ styles = {
                 "stroke-width": ".4",
             }
         ),
-        "biarc1": simplestyle.formatStyle(
+        "biarc1": inkex.Style(
             {
                 "stroke": "#0f7",
                 "fill": "none",
@@ -343,7 +343,7 @@ styles = {
                 "stroke-width": ".4",
             }
         ),
-        "line": simplestyle.formatStyle(
+        "line": inkex.Style(
             {
                 "stroke": "#f44",
                 "fill": "none",
@@ -351,7 +351,7 @@ styles = {
                 "stroke-width": ".4",
             }
         ),
-        "area": simplestyle.formatStyle(
+        "area": inkex.Style(
             {
                 "stroke": "#aaa",
                 "fill": "none",
@@ -361,7 +361,7 @@ styles = {
         ),
     },
     "biarc_style_lathe_fine feed": {
-        "biarc0": simplestyle.formatStyle(
+        "biarc0": inkex.Style(
             {
                 "stroke": "#7f0",
                 "fill": "none",
@@ -369,7 +369,7 @@ styles = {
                 "stroke-width": ".4",
             }
         ),
-        "biarc1": simplestyle.formatStyle(
+        "biarc1": inkex.Style(
             {
                 "stroke": "#f70",
                 "fill": "none",
@@ -377,7 +377,7 @@ styles = {
                 "stroke-width": ".4",
             }
         ),
-        "line": simplestyle.formatStyle(
+        "line": inkex.Style(
             {
                 "stroke": "#744",
                 "fill": "none",
@@ -385,7 +385,7 @@ styles = {
                 "stroke-width": ".4",
             }
         ),
-        "area": simplestyle.formatStyle(
+        "area": inkex.Style(
             {
                 "stroke": "#aaa",
                 "fill": "none",
@@ -394,13 +394,13 @@ styles = {
             }
         ),
     },
-    "area artefact": simplestyle.formatStyle(
+    "area artefact": inkex.Style(
         {"stroke": "#ff0000", "fill": "#ffff00", "stroke-width": "1"}
     ),
-    "area artefact arrow": simplestyle.formatStyle(
+    "area artefact arrow": inkex.Style(
         {"stroke": "#ff0000", "fill": "#ffff00", "stroke-width": "1"}
     ),
-    "dxf_points": simplestyle.formatStyle({"stroke": "#ff0000", "fill": "#ff0000"}),
+    "dxf_points": inkex.Style({"stroke": "#ff0000", "fill": "#ff0000"}),
 }
 
 
@@ -3321,7 +3321,7 @@ class laser_gcode(inkex.Effect):
 
     def __init__(self):
         inkex.Effect.__init__(self)
-        self.OptionParser.add_option(
+        self.OptionParser.add_argument(
             "--directory",
             action="store",
             type="string",
@@ -3329,7 +3329,7 @@ class laser_gcode(inkex.Effect):
             default="",
             help="Output directory",
         )
-        self.OptionParser.add_option(
+        self.OptionParser.add_argument(
             "--filename",
             action="store",
             type="string",
@@ -3337,7 +3337,7 @@ class laser_gcode(inkex.Effect):
             default="output.gcode",
             help="File name",
         )
-        self.OptionParser.add_option(
+        self.OptionParser.add_argument(
             "--tab",
             action="store",
             type="string",
@@ -3345,7 +3345,7 @@ class laser_gcode(inkex.Effect):
             default="",
             help="File name",
         )
-        self.OptionParser.add_option(
+        self.OptionParser.add_argument(
             "--add-numeric-suffix-to-filename",
             "--add_numeric_suffix_to_filename",
             action="store",
@@ -3354,7 +3354,7 @@ class laser_gcode(inkex.Effect):
             default=False,
             help="Add numeric suffix to file name",
         )
-        self.OptionParser.add_option(
+        self.OptionParser.add_argument(
             "--laser_command",
             "--laser-command",
             action="store",
@@ -3363,7 +3363,7 @@ class laser_gcode(inkex.Effect):
             default="M03",
             help="Laser gcode command",
         )
-        self.OptionParser.add_option(
+        self.OptionParser.add_argument(
             "--laser_off_command",
             "--laser-off-command",
             action="store",
@@ -3372,7 +3372,7 @@ class laser_gcode(inkex.Effect):
             default="M05",
             help="Laser gcode end command",
         )
-        self.OptionParser.add_option(
+        self.OptionParser.add_argument(
             "--laser_speed",
             action="store",
             type="int",
@@ -3380,7 +3380,7 @@ class laser_gcode(inkex.Effect):
             default="100",
             help="Laser speed (mm/min)",
         )
-        self.OptionParser.add_option(
+        self.OptionParser.add_argument(
             "--extension",
             action="store",
             type="string",
@@ -3388,7 +3388,7 @@ class laser_gcode(inkex.Effect):
             default=".ngc",
             help="Extension for the output file.",
         )
-        self.OptionParser.add_option(
+        self.OptionParser.add_argument(
             "--travel-speed",
             "--travel_speed",
             action="store",
@@ -3397,7 +3397,7 @@ class laser_gcode(inkex.Effect):
             default="3000",
             help="Travel speed (mm/min)",
         )
-        self.OptionParser.add_option(
+        self.OptionParser.add_argument(
             "--laser_power",
             "--laser-power",
             action="store",
@@ -3406,7 +3406,7 @@ class laser_gcode(inkex.Effect):
             default="255",
             help="S# [255 for full power]",
         )
-        self.OptionParser.add_option(
+        self.OptionParser.add_argument(
             "",
             "--passes",
             action="store",
@@ -3415,7 +3415,7 @@ class laser_gcode(inkex.Effect):
             default="1",
             help="Quantity of passes",
         )
-        self.OptionParser.add_option(
+        self.OptionParser.add_argument(
             "--pass_depth",
             "--pass-depth",
             action="store",
@@ -3424,7 +3424,7 @@ class laser_gcode(inkex.Effect):
             default="1",
             help="Depth of laser cut",
         )
-        self.OptionParser.add_option(
+        self.OptionParser.add_argument(
             "--power_delay",
             "--power-delay",
             action="store",
@@ -3433,7 +3433,7 @@ class laser_gcode(inkex.Effect):
             default="0",
             help="Laser power-on delay (s)",
         )
-        self.OptionParser.add_option(
+        self.OptionParser.add_argument(
             "--suppress_all_messages",
             "--suppress-all-messages",
             action="store",
@@ -3442,7 +3442,7 @@ class laser_gcode(inkex.Effect):
             default=True,
             help="Hide messages during g-code generation",
         )
-        self.OptionParser.add_option(
+        self.OptionParser.add_argument(
             "--create_log" "--create-log",
             action="store",
             type="inkbool",
@@ -3450,7 +3450,7 @@ class laser_gcode(inkex.Effect):
             default=True,
             help="Create log files",
         )
-        self.OptionParser.add_option(
+        self.OptionParser.add_argument(
             "--log_filename",
             "--log-filename",
             action="store",
@@ -3459,7 +3459,7 @@ class laser_gcode(inkex.Effect):
             default="laser2.log",
             help="Create log files",
         )
-        self.OptionParser.add_option(
+        self.OptionParser.add_argument(
             "--engraving-draw-calculation-paths",
             "--engraving_draw_calculation_paths",
             action="store",
@@ -3468,7 +3468,7 @@ class laser_gcode(inkex.Effect):
             default=False,
             help="Draw additional graphics to debug engraving path",
         )
-        self.OptionParser.add_option(
+        self.OptionParser.add_argument(
             "--unit",
             action="store",
             type="string",
@@ -3476,7 +3476,7 @@ class laser_gcode(inkex.Effect):
             default="G21 (All units in mm)",
             help="Units either mm or inches",
         )
-        self.OptionParser.add_option(
+        self.OptionParser.add_argument(
             "--active_tab",
             "--active-tab",
             action="store",
@@ -3485,7 +3485,7 @@ class laser_gcode(inkex.Effect):
             default="",
             help="Defines which tab is active",
         )
-        self.OptionParser.add_option(
+        self.OptionParser.add_argument(
             "--biarc_max_split_depth",
             "--biarc-max-split-depth",
             action="store",
@@ -3585,7 +3585,7 @@ class laser_gcode(inkex.Effect):
             style["biarc%s_r" % i] = simplestyle.parseStyle(style["biarc%s" % i])
             style["biarc%s_r" % i]["marker-start"] = "url(#DrawCurveMarker_r)"
             del style["biarc%s_r" % i]["marker-end"]
-            style["biarc%s_r" % i] = simplestyle.formatStyle(style["biarc%s_r" % i])
+            style["biarc%s_r" % i] = inkex.Style(style["biarc%s_r" % i])
 
         if group is None:
             group = inkex.etree.SubElement(

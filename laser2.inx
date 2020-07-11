@@ -20,8 +20,7 @@
       <param name="add_numeric_suffix_to_filename" type="boolean" _gui-text="Add numeric suffix {0001, 0002, ...} to filename">true</param>
       <param name="extension" type="enum" _gui-text="File Extension:">
         <item value=".ngc">.ngc</item>
-        <item value=".ngc">.nc</item>
-        <item value=".ncc">.ncc</item>
+        <item value=".nc">.nc</item>
         <item value=".tap">.tap</item>
         <item value=".txt">.txt</item>
         <item value=".gcode">.gcode</item>
@@ -44,6 +43,6 @@ You should have received a copy of the GNU General Public License along with thi
     </effects-menu>
   </effect>
   <script>
-    <command reldir="extensions" interpreter="python">laser2.py</command>
+    <command location="inx" interpreter="python">laser2.py</command>
   </script>
 </inkscape-extension>
