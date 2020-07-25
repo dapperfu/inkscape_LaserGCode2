@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- https://wiki.inkscape.org/wiki/index.php?title=Extension_GUI_Reference -->
 <inkscape-extension xmlns="http://www.inkscape.org/namespace/inkscape/extension">
-  <_name>_Laser GCode Tool2</_name>
-  <id>com.github.jed_frey.j_extensions.laser</id>
-  <dependency type="executable" location="extensions">laser2.py</dependency>
-  <dependency type="executable" location="extensions">inkex.py</dependency>
+  <_name>_Laser GCode2</_name>
+  <id>command.dapperfu.inkscape_lasergcode2</id>
+  <dependency type="executable" location="inx">laser2.py</dependency>
   <param name="tab" type="notebook">
     <page name="splash" _gui-text="GCode Configuration">
       <param name="laser_command" type="enum" _gui-text="Laser On Cmd:">
@@ -11,20 +11,15 @@
         <item value="M4">M4 - Dynamic Laser Power</item>
       </param>
       <param name="laser_off_command" type="string" _gui-text="Laser OFF Command:">M5</param>
-      <param name="travel_speed" type="int" min="0" max="10000" _gui-text="Travel Speed (mm/min):">500</param>
-      <param name="laser_speed" type="int" min="0" max="4000" _gui-text="Laser Speed (mm/min):">250</param>
+      <param name="travel_speed" type="int" min="0" max="10000" _gui-text="Travel Speed (mm/min):">200</param>
+      <param name="laser_speed" type="int" min="0" max="4000" _gui-text="Laser Speed (mm/min):">100</param>
       <param name="laser_power" type="int" min="0" max="20000" _gui-text="Laser Power S# (0-255):">255</param>
-      <param name="power_delay" type="float" min="0" max="600" _gui-text="Power-On Delay (s):">0.0000</param>
-      <param name="directory" type="string" _gui-text="Directory:">/tmp</param>
-      <param name="filename" type="string" _gui-text="Filename:">output</param>
+      <param type="path" name="output_path" gui-text="label" indent="1" mode="file_new">/tmp/output.ngc</param>
       <param name="add_numeric_suffix_to_filename" type="boolean" _gui-text="Add numeric suffix {0001, 0002, ...} to filename">true</param>
-      <param name="extension" type="enum" _gui-text="File Extension:">
-        <item value=".ngc">.ngc</item>
-        <item value=".nc">.nc</item>
-        <item value=".tap">.tap</item>
-        <item value=".txt">.txt</item>
-        <item value=".gcode">.gcode</item>
-      </param>
+    </page>
+    <page name="boilerplate" _gui-text="Boilerplate">
+      <param name="header" type="string" _gui-text="header">G21\nG90</param>
+      <param name="footer" type="string" _gui-text="footer">M5\nG0X0Y0</param>
     </page>
     <page name="license" _gui-text="License">
       <_param name="license" type="description" xml:space="preserve">
@@ -39,7 +34,7 @@ You should have received a copy of the GNU General Public License along with thi
   <effect needs-live-preview="false" needs-document="true">
     <object-type>all</object-type>
     <effects-menu>
-      <submenu _name="_jextensions"/>
+      <submenu _name="gh:_dapperfu"/>
     </effects-menu>
   </effect>
   <script>
