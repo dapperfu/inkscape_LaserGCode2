@@ -50,13 +50,6 @@ import simpletransform
 
 _ = gettext.gettext
 
-# Check if inkex has errormsg (0.46 version doesnot have one.) Could be
-# removed later.
-if "errormsg" not in dir(inkex):
-    inkex.errormsg = lambda msg: sys.stderr.write(
-        (unicode(msg) + "\n").encode("UTF-8"))
-
-
 def bezierslopeatt(xxx_todo_changeme, t):
     ((bx0, by0), (bx1, by1), (bx2, by2), (bx3, by3)) = xxx_todo_changeme
     ax, ay, bx, by, cx, cy, x0, y0 = bezmisc.bezierparameterize(
@@ -1207,7 +1200,7 @@ def point_to_arc_distance(p, arc):
 # arc = [start,end,center,alpha]
 def csp_to_arc_distance(sp1, sp2, arc1, arc2, tolerance=0.01):
     n, i = 10, 0
-    d, d1, dl = (0, (0, 0)), (0, (0, 0)), 0
+    d, d1, dl = (0, [0, 0]), (0, [0, 0]), 0
     while i < 1 or (abs(d1[0] - dl[0]) > tolerance and i < 4):
         i += 1
         dl = d1 * 1
@@ -1978,7 +1971,7 @@ class P:
 
     __rmul__ = __mul__
 
-    def __div__(self, other):
+    def __truediv__(self, other):
         return P(self.x / other, self.y / other)
 
     def mag(self):
@@ -2647,7 +2640,7 @@ def biarc(sp1, sp2, z1, z2, depth=0):
         alpha = (p2a - p0a) % (2 * math.pi)
         if (p0a < p2a and (p1a < p0a or p2a < p1a)) or (p2a < p1a < p0a):
             alpha = -2 * math.pi + alpha
-        if abs(R.x) > 1000000 or abs(R.y) > 1000000 or (R - P0).mag < 0.1:
+        if abs(R.x) > 1000000 or abs(R.y) > 1000000 or (R - P0).mag() < 0.1:
             return None, None
         else:
             return R, alpha
@@ -3342,12 +3335,9 @@ class laser_gcode(inkex.Effect):
             gcode += f"G91\nG1Z-{self.options.pass_depth:.4f}\nG90\n{gcode_pass}"
         with open(self.out_file, "w") as f:
             f.write(f"{self.options.laser_off_command}\n")
-            f.write(f"{self.header}\n")
-            f.write(f"{self.header}\n")
             f.write(f"G0F{self.options.travel_speed}\n")
             f.write(f"G1F{self.options.laser_speed}\n")
             f.write(f"{gcode}\n")
-            f.write(self.footer)
 
     def __init__(self):
         inkex.Effect.__init__(self)
@@ -3463,20 +3453,6 @@ class laser_gcode(inkex.Effect):
             help="Defines which tab is active",
         )
         self.arg_parser.add_argument(
-            "--header",
-            type=str,
-            dest="header",
-            default="",
-            help="GCode Header",
-        )
-        self.arg_parser.add_argument(
-            "--footer",
-            type=str,
-            dest="footer",
-            default="",
-            help="GCode Footer",
-        )
-        self.arg_parser.add_argument(
             "--biarc_max_split_depth",
             type=int,
             dest="biarc_max_split_depth",
@@ -3491,6 +3467,7 @@ class laser_gcode(inkex.Effect):
         p = self.transform_csp(p, layer)
 
         # Sort to reduce Rapid distance
+        """
         k = range(1, len(p))
         keys = [0]
         while len(k) > 0:
@@ -3498,13 +3475,11 @@ class laser_gcode(inkex.Effect):
             dist = None
             for i in range(len(k)):
                 start = p[k[i]][0][1]
-                dist = max(
-                    (-((end[0] - start[0]) ** 2 + (end[1] - start[1]) ** 2), i), dist
-                )
+                dist = max(-((end[0] - start[0]) ** 2 + (end[1] - start[1]) ** 2), dist)
             keys += [k[dist[1]]]
             del k[dist[1]]
-        for k in keys:
-            subpath = p[k]
+        """
+        for subpath in p:
             c += [[[subpath[0][1][0], subpath[0][1][1]], "move", 0, 0]]
             for i in range(1, len(subpath)):
                 sp1 = [[subpath[i - 1][j][0], subpath[i - 1][j][1]]
@@ -3680,9 +3655,6 @@ class laser_gcode(inkex.Effect):
 
     def check_dir(self):
         self.options.directory = os.path.dirname(self.options.output_path)
-        self.options.file, self.options.extension = os.path.splitext(os.path.basename(self.options.output_path))
-        self.header = self.options.header
-        self.footer = self.options.footer
         # Error out if the output directory does not
         if not os.path.isdir(self.options.directory):
             self.error(
@@ -3692,24 +3664,22 @@ class laser_gcode(inkex.Effect):
             return False
 
         if self.options.add_numeric_suffix_to_filename:
-            dir_list = os.listdir(self.options.directory)
-            if "." in self.options.file:
-                r = re.match(r"^(.*)(\..*)$", self.options.file)
-                ext = r.group(2)
-                name = r.group(1)
-            else:
-                ext = ""
-                name = self.options.file
+            self.options.file, self.options.extension = os.path.splitext(os.path.basename(self.options.output_path))
+            import glob 
+            existing_files = glob.glob(os.path.join(self.options.directory, self.options.file+"*"+self.options.extension))
             max_n = 0
-            for s in dir_list:
-                r = re.match(
-                    r"^{}_0*(\d+){}$".format(re.escape(name), re.escape(ext)), s
-                )
-                if r:
-                    max_n = max(max_n, int(r.group(1)))
-            self.options.file = f"{name}_0{max_n+1:04d}{self.options.extension}"
+            for existing_file in existing_files:
+                existing_base, _ = os.path.splitext(os.path.basename(existing_file))
+                existing_file_count = int(existing_base.split("_")[1])
+                max_n = max(max_n, existing_file_count)
+            self.options.file = f"{self.options.file}_0{max_n+1:04d}{self.options.extension}"
+            self.out_file = os.path.join(self.options.directory, self.options.file)
 
-        self.out_file = os.path.join(self.options.directory, self.options.file)
+        else:
+            self.out_file = os.path.dirname(self.options.output_path)
+
+
+
         print("Testing writing rights on '%s'" % (self.out_file))
         try:
             with open(self.out_file, "w") as f:
@@ -3793,6 +3763,7 @@ class laser_gcode(inkex.Effect):
 
     def get_transforms(self, g):
         root = self.document.getroot()
+        trans2 = self.get_transforms2(g)
         trans = []
         while g != root:
             if "transform" in g.keys():
@@ -3802,13 +3773,41 @@ class laser_gcode(inkex.Effect):
                     t, trans) if trans != [] else t
                 print(trans)
             g = g.getparent()
+        if len(trans) == 0:
+            trans = inkex.transforms.Transform(None)
+        else:
+            trans = inkex.transforms.Transform(trans)
+        assert trans == trans2
+
+        return trans
+
+        # The <g> SVG element is a container used to group other SVG elements.
+    def get_transforms2(self, g):
+        """ Another way to get the transforms, using recursion. """
+        root = self.document.getroot()
+        # Identity transform.
+        transform = inkex.transforms.Transform(None)
+        # Get each transform up to the root element.
+        def get_transforms_to_root(g, transform):
+            # If at root:
+            if g == root:
+                # Return the transforms.
+                return transform
+            # If transform is in the container keys:
+            if "transform" in g.keys():
+                # Get the transform
+                transform2 = inkex.transforms.Transform(g.get("transform"))
+            else:
+                # Otherwise just use an identity 
+                transform2 = inkex.transforms.Transform(None)
+            # Apply the transform to the children's transforms and recurse up an element.
+            return get_transforms_to_root(g.getparent(), transform*transform2)
+        trans = get_transforms_to_root(g, transform)
         return trans
 
     def apply_transforms(self, g, csp):
         trans = self.get_transforms(g)
-        if trans != []:
-            simpletransform.applyTransformToPath(trans, csp)
-        return csp
+        return csp.transform(trans)
 
     def transform(self, source_point, layer, reverse=False):
         if layer is None:
@@ -3872,10 +3871,7 @@ class laser_gcode(inkex.Effect):
                         print(point)
                     # Zcoordinates definition taken from Orientatnion point 1
                     # and 2
-                    self.Zcoordinates[layer] = [
-                        max(points[0][1][2], points[1][1][2]),
-                        min(points[0][1][2], points[1][1][2]),
-                    ]
+                    self.Zcoordinates[layer] = [0, 0]
                     matrix = numpy.array(
                         [
                             [points[0][0][0], points[0][0][1], 1, 0, 0, 0, 0, 0, 0],
@@ -4041,17 +4037,21 @@ class laser_gcode(inkex.Effect):
         def recursive_search(g, layer, selected=False):
             items = g.getchildren()
             items.reverse()
-            for i in items:
+            for item in items:
+                # If selected is checked
                 if selected:
-                    self.selected[i.get("id")] = i
+                    # Add to selected dictionary.
+                    self.svg.selected[item.get("id")] = item
+
+                #
                 if (
-                    i.tag == inkex.addNS("g", "svg")
-                    and i.get(inkex.addNS("groupmode", "inkscape")) == "layer"
+                    item.tag == inkex.addNS("g", "svg")
+                    and item.get(inkex.addNS("groupmode", "inkscape")) == "layer"
                 ):
-                    self.layers += [i]
-                    recursive_search(i, i)
-                elif i.get("gcodetools") == "Laser GCode Orientation Group":
-                    points = self.get_orientation_points(i)
+                    self.layers.append(item)
+                    recursive_search(item, item)
+                elif item.get("gcodetools") == "Laser GCode Orientation Group":
+                    points = self.get_orientation_points(item)
                     if points is not None:
                         self.orientation_points[layer] = (
                             self.orientation_points[layer] + [points[:]]
@@ -4069,20 +4069,28 @@ class laser_gcode(inkex.Effect):
                                     "inkscape")),
                             "bad_orientation_points_in_some_layers",
                         )
-                elif i.tag == inkex.addNS("path", "svg"):
-                    if "gcodetools" not in i.keys():
+                elif item.tag == inkex.addNS("path", "svg"):
+                    if "gcodetools" not in item.keys():
                         self.paths[layer] = (
-                            self.paths[layer] + [i] if layer in self.paths else [i])
-                        if i.get("id") in self.svg.selected:
+                            self.paths[layer] + [item]
+                            if layer in self.paths
+                            else
+                            [item]
+                        )
+                        if item.get("id") in self.svg.selected:
                             self.selected_paths[layer] = (
-                                self.selected_paths[layer] + [i]
+                                self.selected_paths[layer] + [item]
                                 if layer in self.selected_paths
-                                else [i]
+                                else
+                                [item]
                             )
-                elif i.tag == inkex.addNS("g", "svg"):
+                elif item.tag == inkex.addNS("g", "svg"):
                     recursive_search(
-                        i, layer, (i.get("id") in self.svg.selected))
-                elif i.get("id") in self.svg.selected:
+                        item,
+                        layer,
+                        (item.get("id") in self.svg.selected)
+                    )
+                elif item.get("id") in self.svg.selected:
                     self.error(
                         _("This extension works with Paths and Dynamic Offsets and groups of them only! All other objects will be ignored!\nSolution 1: press Path->Object to path or Shift+Ctrl+C.\nSolution 2: Path->Dynamic offset or Ctrl+J.\nSolution 3: export all contours to PostScript level 2 (File->Save As->.ps) and File->Import this file."),
                         "selection_contains_objects_that_are_not_paths",
@@ -4091,11 +4099,19 @@ class laser_gcode(inkex.Effect):
         recursive_search(self.document.getroot(), self.document.getroot())
 
     def get_orientation_points(self, g):
+        """ Get the orientation points from the svg (if they exist.)
+        """
+
+        # Get the container children.
         items = g.getchildren()
+        # Reverse the list.
         items.reverse()
+        #
         p2, p3 = [], []
         p = None
+        # Loop through each of the child items
         for i in items:
+            # If the item is also a container and has the given settings:
             if (i.tag == inkex.addNS("g", "svg") and i.get("gcodetools")
                     == "Gcodetools orientation point (2 points)"):
                 p2 += [i]
@@ -4120,16 +4136,15 @@ class laser_gcode(inkex.Effect):
                 if node.get(
                         "gcodetools") == "Gcodetools orientation point text":
                     r = re.match(
-                        r"(?i)\s*\(\s*(-?\s*\d*(?:,|\.)*\d*)\s*;\s*(-?\s*\d*(?:,|\.)*\d*)\s*;\s*(-?\s*\d*(?:,|\.)*\d*)\s*\)\s*",
+                        r"(?i)\s*\(\s*(-?\s*\d*(?:,|\.)*\d*)\s*;\s*(-?\s*\d*(?:,|\.)*\d*)\s*\)\s*",
                         node.text,
                     )
                     point[1] = [
                         float(
                             r.group(1)), float(
-                            r.group(2)), float(
-                            r.group(3))]
+                            r.group(2))]
             if point[0] != [] and point[1] != []:
-                points += [point]
+                points.append(point)
         if len(points) == len(p2) == 2 or len(points) == len(p3) == 3:
             return points
         else:
@@ -4271,12 +4286,13 @@ class laser_gcode(inkex.Effect):
         self.check_dir()
         gcode = ""
 
-        biarc_group = etree.SubElement(
+        """biarc_group = etree.SubElement(
             list(self.selected_paths.keys())[0]
             if len(self.selected_paths.keys()) > 0
             else self.layers[0],
             inkex.addNS("g", "svg"),
         )
+        """
         print(("self.layers=", self.layers))
         print(("paths=", paths))
         
@@ -4329,13 +4345,13 @@ class laser_gcode(inkex.Effect):
                 "active_layer_already_has_orientation_points",
             )
 
+        # Create orientation group on the current layer.
         orientation_group = etree.SubElement(
             layer,
             inkex.addNS("g", "svg"),
             {"gcodetools": "Laser GCode Orientation Group"},
         )
 
-        # translate == ['0', '-917.7043']
         if layer.get("transform") is not None:
             translate = (
                 layer.get("transform")
@@ -4353,29 +4369,26 @@ class laser_gcode(inkex.Effect):
 
         if self.document.getroot().get("height") == "100%":
             doc_height = 1052.3622047
-            print("Overruding height from 100 percents to %s" % doc_height)
+            print(f"Overruding height from 100% to {doc_height}")
 
         print("Document height: " + str(doc_height))
 
         if self.options.unit == "G21 (All units in mm)":
-            points = [[0.0, 0.0, 0.0], [100.0, 0.0, 0.0], [0.0, 100.0, 0.0]]
+            orientation_points = [[0.0, 0.0], [100.0, 0.0]]
             orientation_scale = 1
             print(
                 "orientation_scale < 0 ===> switching to mm units=%0.10f"
                 % orientation_scale
             )
         elif self.options.unit == "G20 (All units in inches)":
-            points = [[0.0, 0.0, 0.0], [5.0, 0.0, 0.0], [0.0, 5.0, 0.0]]
-            orientation_scale = 90
-            print(
-                "orientation_scale < 0 ===> switching to inches units=%0.10f"
-                % orientation_scale
+            self.error(
+                _("Use metric."),
+                "error",
             )
+            raise Exception("Metric.")
 
-        points = points[:2]
-
-        print(f"using orientation scale: {orientation_scale}, i={points}")
-        for i in points:
+        print(f"using orientation scale: {orientation_scale}, i={orientation_points}")
+        for i in orientation_points:
             # X == Correct!
             # si == x,y coordinate in px
             # si have correct coordinates
@@ -4412,7 +4425,7 @@ class laser_gcode(inkex.Effect):
                     "gcodetools": "Gcodetools orientation point text",
                 },
             )
-            t.text = "({}; {}; {})".format(i[0], i[1], i[2])
+            t.text = "({}; {})".format(i[0], i[1])
 
     ##########################################################################
     ###
@@ -4542,10 +4555,19 @@ def inkscape_run_debug():
         fid.write(f'    "{out_file}"\n')
         fid.write("]\n")
 
-        fid.write("import laser2\n")
-        fid.write("laser = laser2.laser_gcode()\n")
-        fid.write("laser.run(args)\n")
-
+        fid.write(f"""
+# Run the extension.
+import {base_name} as extension
+# Find the inkex.Effect class
+for item in dir(extension):
+    # Brute force looking for 'run' attribute.
+    if hasattr(getattr(extension, item), "run"):
+        # Create an instance of the extension.
+        extension_instance = getattr(extension, item)()
+        # Run the extension with the given arguments.
+        extension_instance.run(args)
+        break
+""")
 
 if __name__ == "__main__":
     # Debug script when called from Inkscape

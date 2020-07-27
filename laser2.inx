@@ -17,10 +17,6 @@
       <param type="path" name="output_path" gui-text="label" indent="1" mode="file_new">/tmp/output.ngc</param>
       <param name="add_numeric_suffix_to_filename" type="boolean" _gui-text="Add numeric suffix {0001, 0002, ...} to filename">true</param>
     </page>
-    <page name="boilerplate" _gui-text="Boilerplate">
-      <param name="header" type="string" _gui-text="header">G21\nG90</param>
-      <param name="footer" type="string" _gui-text="footer">M5\nG0X0Y0</param>
-    </page>
     <page name="license" _gui-text="License">
       <_param name="license" type="description" xml:space="preserve">
 This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published bythe Free Software Foundation; either version 2 of the License, or (at your option) any later version.
