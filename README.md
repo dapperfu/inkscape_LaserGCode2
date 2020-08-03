@@ -2,6 +2,15 @@
 
 [J Tech Photonics, Inc's Inkscape Laser Plug-in Updated](https://jtechphotonics.com/?page_id=2012) for Inkscape v1.0 & Targeting GRBL.
 
+GCodetools (included with Inkscape) is more full featured. This is a quick way to 
+
+Toolchain/Stack for laserin stuff:
+
+1. Inkscape.
+2. [inkscape_HatchFill2](https://github.com/dapperfu/inkscape_HatchFill2/)
+3. [inkscape_HatchFill2](https://github.com/dapperfu/inkscape_LaserGCode2)
+4. [python_grbl](https://github.com/dapperfu/python_grbl)
+
 
 # Installation:
 
@@ -41,6 +50,10 @@ Uncomment ```inkscape_run_debug()``` at the end of ```laser2.py```.
    3. ```laser2_run.py``` - Python script to programmatically run the extension.
      (Useful for debugging in Spyder3/VSCode)
    4. ```input_file.svg``` - Copy of the input SVG file.
+
+## Example
+
+
 
 # Issues 
 
