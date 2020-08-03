@@ -7,9 +7,9 @@ GCodetools (included with Inkscape) is more full featured. This is a quick way t
 Toolchain/Stack for laserin stuff:
 
 1. Inkscape.
-2. [inkscape_HatchFill2](https://github.com/dapperfu/inkscape_HatchFill2/)
-3. [inkscape_HatchFill2](https://github.com/dapperfu/inkscape_LaserGCode2)
-4. [python_grbl](https://github.com/dapperfu/python_grbl)
+1. [inkscape_HatchFill2](https://github.com/dapperfu/inkscape_HatchFill2/)
+1. [inkscape_HatchFill2](https://github.com/dapperfu/inkscape_LaserGCode2)
+
 
 
 # Installation:
