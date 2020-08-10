@@ -1,5 +1,8 @@
-# Inkscape Laser GCode
-This project is a learning platform for how Inkscape plugins work. You probably want the original, https://github.com/JTechPhotonics/J-Tech-Photonics-Laser-Tool
+# Inkscape Laser GCode [Deprecated/Do Not Use]
+
+- This project is a learning platform for how Inkscape plugins work. It was a fork of https://github.com/JTechPhotonics/J-Tech-Photonics-Laser-Tool (from before they put it on GitHub).
+
+There is also: https://github.com/ChrisWag91/Inkscape-Lasertools-Plugin
 
 Toolchain/Stack for laserin stuff:
 
