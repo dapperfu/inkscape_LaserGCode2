@@ -1,8 +1,5 @@
 # Inkscape Laser GCode
-
-[J Tech Photonics, Inc's Inkscape Laser Plug-in Updated](https://jtechphotonics.com/?page_id=2012) for Inkscape v1.0 & Targeting GRBL.
-
-GCodetools (included with Inkscape) is more full featured. This is a quick way to 
+This project is a learning platform for how Inkscape plugins work. You probably want the original, https://github.com/JTechPhotonics/J-Tech-Photonics-Laser-Tool
 
 Toolchain/Stack for laserin stuff:
 
