@@ -8,7 +8,7 @@ Toolchain/Stack for laserin stuff:
 
 1. Inkscape.
 1. [inkscape_HatchFill2](https://github.com/dapperfu/inkscape_HatchFill2/)
-1. [inkscape_LaserGCode2](https://github.com/dapperfu/inkscape_LaserGCode2)
+1. [~~~inkscape_LaserGCode2~~~](https://github.com/dapperfu/inkscape_LaserGCode2) https://github.com/ChrisWag91/Inkscape-Lasertools-Plugin
 1. [python_grbl](https://github.com/dapperfu/python_grbl)
     ```grblcli run <example.ngc>```
 
